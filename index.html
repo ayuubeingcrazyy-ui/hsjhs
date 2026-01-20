@@ -3,9 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Don't Blink</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
+
+<title>Farewell Invite</title>
 
 <style>
 *{
@@ -16,12 +17,13 @@ font-family:'Creepster', cursive;
 }
 
 body{
-background:url('YOUR_BACKGROUND_IMAGE.jpg') center/cover no-repeat fixed;
+background:url('YOUR_BACKGROUND_IMAGE.jpg') center/cover no-repeat;
 height:100vh;
 overflow:hidden;
 color:white;
 }
 
+/* Pages */
 .page{
 position:absolute;
 width:100%;
@@ -47,12 +49,23 @@ border-radius:8px;
 cursor:pointer;
 }
 
-/* BLOOD */
+/* Blood */
+.blood-container{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+pointer-events:none;
+z-index:5;
+overflow:hidden;
+}
+
 .blood{
 position:absolute;
-top:-100px;
-width:40px;
-height:120px;
+top:-120px;
+width:35px;
+height:140px;
 background:linear-gradient(darkred,red);
 border-radius:50%;
 animation:drop 6s linear infinite;
@@ -64,33 +77,32 @@ opacity:.8;
 100%{transform:translateY(120vh);}
 }
 
-/* FOG */
+/* Fog */
 .fog{
 position:absolute;
 width:200%;
-height:200%;
-background:radial-gradient(circle,rgba(255,255,255,.06),transparent);
-animation:fogmove 40s linear infinite;
+height:100%;
+background:radial-gradient(circle at 50% 50%,rgba(255,255,255,.05),transparent);
+animation:fogMove 40s linear infinite;
 }
 
-@keyframes fogmove{
-from{transform:translateX(-50%);}
-to{transform:translateX(50%);}
+@keyframes fogMove{
+from{transform:translateX(0);}
+to{transform:translateX(-50%);}
 }
 
-/* BAT */
+/* Bat */
 .bat{
 position:absolute;
-top:20%;
-width:120px;
+top:15%;
+width:80px;
 animation:fly 12s linear infinite;
 }
 
 @keyframes fly{
-from{left:-150px;}
+from{left:-100px;}
 to{left:110%;}
 }
-
 </style>
 </head>
 
@@ -98,40 +110,40 @@ to{left:110%;}
 
 <div class="fog"></div>
 
-<div class="blood" style="left:20%"></div>
-<div class="blood" style="left:50%"></div>
-<div class="blood" style="left:80%"></div>
+<div class="blood-container">
+<span class="blood" style="left:10%;animation-delay:0s"></span>
+<span class="blood" style="left:30%;animation-delay:2s"></span>
+<span class="blood" style="left:50%;animation-delay:4s"></span>
+<span class="blood" style="left:70%;animation-delay:1s"></span>
+<span class="blood" style="left:90%;animation-delay:3s"></span>
+</div>
 
-<img src="YOUR_BAT_PNG.png" class="bat">
+<img class="bat" src="YOUR_BAT_PNG.png">
 
-<div id="p1" class="page">
+<div class="page" id="p1">
 <h1>INITIALIZING...</h1>
 <p>DON'T BLINK.</p>
-<button onclick="go2()">ENTER</button>
+<button onclick="next(1)">ENTER</button>
 </div>
 
-<div id="p2" class="page hidden">
-<h1>😱</h1>
-<button onclick="go3()">CONTINUE</button>
+<div class="page hidden" id="p2">
+<h1>👁️</h1>
+<p>Loading Memories...</p>
+<button onclick="next(2)">NEXT</button>
 </div>
 
-<div id="p3" class="page hidden">
+<div class="page hidden" id="p3">
 <h1>YOU HAVE BEEN CHOSEN.</h1>
 <p>WE'LL MEET AT FAREWELL 👁️</p>
-<p>Howrah St. John's High School</p>
+<p>Howrah St John's High School</p>
 <p>Venue: School Auditorium</p>
 <p>Time: To Be Announced</p>
 </div>
 
 <script>
-function go2(){
-p1.classList.add("hidden");
-p2.classList.remove("hidden");
-}
-
-function go3(){
-p2.classList.add("hidden");
-p3.classList.remove("hidden");
+function next(n){
+document.getElementById('p'+n).classList.add('hidden');
+document.getElementById('p'+(n+1)).classList.remove('hidden');
 }
 </script>
 
