@@ -1,89 +1,149 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>HSJHS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Farewell Horror</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
 
 <style>
-body {
-    margin: 0;
-    background: black;
-    color: white;
-    font-family: Arial, sans-serif;
-    overflow: hidden;
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Creepster', cursive;
 }
 
-#loadingScreen, #videoScreen, #finalScreen {
-    position: fixed;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+body{
+background:black;
+color:white;
+overflow:hidden;
+text-align:center;
+animation:flicker 4s infinite;
 }
 
-#videoScreen, #finalScreen {
-    display: none;
+.page{
+width:100vw;
+height:100vh;
+display:none;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+position:absolute;
+top:0;
+left:0;
 }
 
-#loadingScreen h1 {
-    margin: 10px;
-    letter-spacing: 3px;
+.show{display:flex;}
+
+h1{font-size:2.5rem;margin-bottom:20px;}
+p{font-size:1.4rem;}
+
+button{
+margin-top:25px;
+padding:12px 30px;
+background:red;
+border:none;
+color:white;
+font-size:1.3rem;
+border-radius:6px;
+cursor:pointer;
 }
 
-button {
-    margin-top: 30px;
-    padding: 12px 30px;
-    font-size: 18px;
-    background: red;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-button:hover {
-    background: darkred;
+.blood{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:120px;
+background:linear-gradient(to bottom,#8b0000,transparent);
+animation:drip 6s linear infinite;
+pointer-events:none;
 }
 
-video {
-    width: 100vw;
-    height: 100vh;
-    object-fit: cover;
+@keyframes drip{
+0%{transform:translateY(-40px);}
+100%{transform:translateY(40px);}
+}
+
+.bat{
+position:fixed;
+top:25%;
+right:-150px;
+width:120px;
+animation:fly 8s linear infinite;
+}
+
+@keyframes fly{
+from{right:-150px;}
+to{right:110%;}
+}
+
+@keyframes flicker{
+0%,100%{opacity:1;}
+50%{opacity:.9;}
+55%{opacity:.8;}
+}
+
+video{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.fade{
+animation:fadein 2s;
+}
+
+@keyframes fadein{
+from{opacity:0;}
+to{opacity:1;}
 }
 </style>
 </head>
 
 <body>
 
-<div id="loadingScreen">
-    <h1>Loading...</h1>
-    <h1>Do Not Blink</h1>
-    <button onclick="startScare()">NEXT</button>
+<!-- PAGE 1 -->
+<div class="page show" id="p1">
+<div class="blood"></div>
+<img src="bat.png" class="bat">
+<h1>INITIALIZING...</h1>
+<p>DON'T BLINK.</p>
+<button onclick="go2()">NEXT</button>
 </div>
 
-<div id="videoScreen">
-    <video id="scareVideo" playsinline preload="auto">
-        <source src="jumpscare.mp4" type="video/mp4">
-    </video>
+<!-- PAGE 2 -->
+<div class="page" id="p2">
+<video id="jump" src="jumpscare.mp4"></video>
 </div>
 
-<div id="finalScreen">
-    <h1>You Are Selected.</h1>
-    <h2>Meet You At Farewell 👻</h2>
+<!-- PAGE 3 -->
+<div class="page" id="p3">
+<div class="blood"></div>
+<img src="bat.png" class="bat">
+<h1>YOU HAVE BEEN CHOSEN.</h1>
+<p>WE'LL MEET AT FAREWELL 👁️</p>
+<br>
+<p>Howrah St John's High School</p>
+<p>Venue: School Auditorium</p>
+<p>Date: 31 January 2026</p>
 </div>
 
 <script>
-function startScare() {
-    document.getElementById("loadingScreen").style.display = "none";
-    document.getElementById("videoScreen").style.display = "block";
+function go2(){
+document.getElementById('p1').classList.remove('show');
+document.getElementById('p2').classList.add('show');
 
-    const video = document.getElementById("scareVideo");
-    video.muted = false;
-    video.play();
+let v=document.getElementById('jump');
+v.muted=false;
+v.play();
 
-    video.onended = function() {
-        document.getElementById("videoScreen").style.display = "none";
-        document.getElementById("finalScreen").style.display = "flex";
-    };
+setTimeout(()=>{
+document.getElementById('p2').classList.remove('show');
+document.getElementById('p3').classList.add('show');
+},3000);
 }
 </script>
 
