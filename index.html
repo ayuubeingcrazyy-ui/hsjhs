@@ -17,65 +17,27 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background-color: #0d0202;
-            font-family: 'Creepster', system-ui;
+            background-color: #000; /* Fallback only */
+            font-family: 'Creepster', cursive;
             color: white;
             touch-action: manipulation;
         }
 
-        /* --- BACKGROUND --- */
+        /* --- BACKGROUND FIXED --- */
         .background-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('./bg.jpg');
+            background-image: url('bg.jpg'); /* Updated filename */
             background-size: cover;
             background-position: center;
-            z-index: -5; /* Back of everything */
+            background-repeat: no-repeat;
+            z-index: -10;
         }
 
-        .background-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, transparent 20%, rgba(0,0,0,0.8) 100%);
-            z-index: -4;
-        }
-
-        /* --- REDUCED BLOOD BEHIND TEXT --- */
-        .blood-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1; /* Higher than BG, but lower than Text (which is 5+) */
-        }
-
-        .drip {
-            position: absolute;
-            top: -400px; 
-            width: 1.2px;
-            background: linear-gradient(to bottom, transparent, var(--blood-red), var(--glow-red));
-            height: 300px;
-            filter: blur(0.5px);
-            box-shadow: 0 0 5px var(--glow-red);
-            opacity: 0.6;
-            animation: dripFall linear infinite;
-        }
-
-        @keyframes dripFall {
-            0% { transform: translate3d(0, 0, 0); opacity: 0; }
-            10% { opacity: 0.8; }
-            90% { opacity: 0.8; }
-            100% { transform: translate3d(0, calc(100vh + 800px), 0); opacity: 0; }
-        }
-
+        /* --- FOG LAYER (Fixed Visibility) --- */
         .fog {
             position: fixed;
             top: 0;
@@ -83,9 +45,10 @@
             width: 200%;
             height: 100%;
             background: url('https://raw.githubusercontent.com/atlemo/Transparent-Textures/master/fog.png');
-            opacity: 0.2;
-            z-index: -2;
-            animation: fogMove 60s linear infinite;
+            opacity: 0.35;
+            z-index: -8;
+            animation: fogMove 45s linear infinite;
+            pointer-events: none;
         }
 
         @keyframes fogMove {
@@ -93,28 +56,57 @@
             to { transform: translateX(-50%); }
         }
 
+        /* --- BLOOD DRIPS (Behind Text) --- */
+        .blood-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -5; /* Behind everything except BG and Fog */
+        }
+
+        .drip {
+            position: absolute;
+            top: -400px; 
+            width: 1.2px;
+            background: linear-gradient(to bottom, transparent, var(--blood-red), var(--glow-red));
+            height: 350px;
+            filter: blur(0.4px);
+            box-shadow: 0 0 5px var(--glow-red);
+            opacity: 0.7;
+            animation: dripFall linear infinite;
+        }
+
+        @keyframes dripFall {
+            0% { transform: translate3d(0, 0, 0); opacity: 0; }
+            10% { opacity: 0.9; }
+            100% { transform: translate3d(0, calc(100vh + 800px), 0); opacity: 0; }
+        }
+
         /* --- SECTIONS --- */
         section {
             display: none;
-            height: 100%;
+            height: 100vh;
             width: 100%;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
             position: absolute;
-            padding: 20px;
+            padding: 30px;
             box-sizing: border-box;
-            z-index: 10; /* Ensures text is always ABOVE the blood */
+            z-index: 10;
         }
 
         #screen1 { display: flex; }
-        #screen2 { z-index: 100; background: black; }
+        #screen2 { z-index: 100; background: #000; }
         #screen3 { }
 
         .fade-text {
             animation: fadeInOut 4s ease-in-out infinite;
-            text-shadow: 0 0 20px #000, 0 0 10px #000;
+            text-shadow: 2px 2px 10px rgba(0,0,0,1);
         }
 
         @keyframes fadeInOut {
@@ -122,23 +114,21 @@
             50% { opacity: 1; transform: scale(1.02); }
         }
 
-        /* --- BUTTON --- */
         .btn-enter {
-            margin-top: 40px;
-            padding: 20px 60px;
+            margin-top: 50px;
+            padding: 15px 50px;
             font-family: 'Creepster', cursive;
             font-size: 2.2rem;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0, 0, 0, 0.4);
             color: var(--blood-red);
             border: 2px solid var(--blood-red);
             cursor: pointer;
-            transition: 0.3s;
             text-transform: uppercase;
-            z-index: 20;
-            position: relative;
+            box-shadow: 0 0 15px rgba(0,0,0,0.8);
+            border-radius: 5px;
         }
 
-        .btn-enter:active, .btn-enter:hover {
+        .btn-enter:active {
             color: white;
             background: var(--blood-red);
             box-shadow: 0 0 30px var(--glow-red);
@@ -146,34 +136,45 @@
 
         /* --- JUMPSCARE --- */
         #jumpscare-video { width: 100%; height: 100%; object-fit: cover; }
+        
         .shake { animation: shake 0.1s infinite; }
         @keyframes shake {
-            0% { transform: translate(3px, 3px); }
-            50% { transform: translate(-3px, -3px); }
-            100% { transform: translate(3px, -3px); }
+            0% { transform: translate(2px, 2px); }
+            50% { transform: translate(-2px, -2px); }
+            100% { transform: translate(2px, -2px); }
         }
 
-        /* --- BAT --- */
+        /* --- THE BAT --- */
         .bat {
             position: absolute;
-            width: 70px;
-            z-index: 2; /* Bat flies behind text, above blood */
+            width: 75px;
+            z-index: 5; /* In front of blood, behind text */
             pointer-events: none;
-            animation: flyRight 12s linear infinite;
+            animation: flyRight 11s linear infinite;
         }
 
         @keyframes flyRight {
-            0% { left: -150px; top: 15%; }
-            100% { left: 110%; top: 20%; }
+            0% { left: -120px; top: 15%; transform: scale(0.8); }
+            50% { transform: scale(1.1); }
+            100% { left: 110%; top: 22%; transform: scale(0.8); }
         }
 
-        .final-text h1 { font-size: 3.2rem; color: var(--blood-red); margin-bottom: 0; }
-        .final-text p { font-size: 1.5rem; margin: 10px 0; }
+        /* --- FINAL TEXT --- */
+        .final-text h1 { font-size: 3rem; color: var(--blood-red); margin: 0; text-shadow: 0 0 10px #000; }
+        .final-text p { font-size: 1.6rem; margin: 12px 0; text-shadow: 0 0 15px #000; }
         .float { animation: floatAnim 4s ease-in-out infinite; }
         
         @keyframes floatAnim {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-15px); }
+        }
+
+        /* 9:16 Aspect Ratio / Mobile Tweaks */
+        @media (max-width: 600px) {
+            .final-text h1 { font-size: 2.6rem; }
+            .final-text p { font-size: 1.4rem; }
+            .btn-enter { font-size: 1.8rem; padding: 12px 40px; }
+            .background-container { background-position: 65% center; } /* Slight offset for mobile focus */
         }
     </style>
 </head>
@@ -184,7 +185,6 @@
     </audio>
 
     <div class="background-container"></div>
-    <div class="background-overlay"></div>
     <div class="fog"></div>
     <div class="blood-container" id="blood"></div>
     
@@ -207,22 +207,21 @@
             <h1>YOU HAVE BEEN CHOSEN.</h1>
             <p>WE’LL MEET AT FAREWELL 👁️</p>
             <br>
-            <p style="color: var(--blood-red);">Howrah St. John’s High School</p>
+            <p style="color: var(--blood-red); font-size: 2.2rem;">Howrah St. John’s High School</p>
             <p>Venue: School Auditorium</p>
-            <p style="font-size: 1rem; opacity: 0.7;">Time: To Be Announced</p>
+            <p style="font-size: 1.1rem; opacity: 0.8; letter-spacing: 2px;">Time: To Be Announced</p>
         </div>
     </section>
 
     <script>
-        // Reduced to 12 drips for a cleaner look
+        // Only 8 drips for a cleaner look that doesn't hide the bg.jpg
         const bloodContainer = document.getElementById('blood');
-        for (let i = 0; i < 12; i++) {
+        for (let i = 0; i < 8; i++) {
             let drip = document.createElement('div');
             drip.className = 'drip';
             drip.style.left = Math.random() * 100 + 'vw';
-            drip.style.animationDuration = (Math.random() * 4 + 3) + 's';
+            drip.style.animationDuration = (Math.random() * 2 + 4) + 's';
             drip.style.animationDelay = (Math.random() * 8) + 's';
-            drip.style.width = '1px';
             bloodContainer.appendChild(drip);
         }
 
@@ -230,8 +229,8 @@
             const video = document.getElementById('jumpscare-video');
             const audio = document.getElementById('ambient-sound');
             
-            audio.volume = 0.3;
-            audio.play().catch(e => console.log("Audio play blocked"));
+            audio.volume = 0.4;
+            audio.play().catch(() => {});
 
             document.getElementById('screen1').style.display = 'none';
             document.getElementById('screen2').style.display = 'flex';
