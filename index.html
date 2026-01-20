@@ -1,54 +1,90 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Farewell Invite</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>HSJHS</title>
+
 <style>
-body{
-margin:0;
-background:black;
-color:white;
-font-family:Arial;
-text-align:center;
-overflow:hidden;
+body {
+    margin: 0;
+    background: black;
+    color: white;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
 }
-#loader{
-position:absolute;
-top:40%;
-width:100%;
-font-size:24px;
-animation:blink 1s infinite;
+
+#loadingScreen, #videoScreen, #finalScreen {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
-@keyframes blink{
-50%{opacity:0;}
+
+#videoScreen, #finalScreen {
+    display: none;
 }
-video{
-display:none;
-width:100vw;
-height:100vh;
-object-fit:cover;
+
+#loadingScreen h1 {
+    margin: 10px;
+    letter-spacing: 3px;
+}
+
+button {
+    margin-top: 30px;
+    padding: 12px 30px;
+    font-size: 18px;
+    background: red;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+button:hover {
+    background: darkred;
+}
+
+video {
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
 }
 </style>
 </head>
 
 <body>
 
-<div id="loader">
-Loading Memories...<br>
-Do Not Blink 😈
+<div id="loadingScreen">
+    <h1>Loading...</h1>
+    <h1>Do Not Blink</h1>
+    <button onclick="startScare()">NEXT</button>
 </div>
 
-<video id="scare" autoplay>
-<source src="jumpscare.mp4" type="video/mp4">
-</video>
+<div id="videoScreen">
+    <video id="scareVideo" playsinline preload="auto">
+        <source src="jumpscare.mp4" type="video/mp4">
+    </video>
+</div>
+
+<div id="finalScreen">
+    <h1>You Are Selected.</h1>
+    <h2>Meet You At Farewell 👻</h2>
+</div>
 
 <script>
-setTimeout(()=>{
-document.getElementById("loader").style.display="none";
-let v=document.getElementById("scare");
-v.style.display="block";
-v.play();
-},3000);
+function startScare() {
+    document.getElementById("loadingScreen").style.display = "none";
+    document.getElementById("videoScreen").style.display = "block";
+
+    const video = document.getElementById("scareVideo");
+    video.muted = false;
+    video.play();
+
+    video.onended = function() {
+        document.getElementById("videoScreen").style.display = "none";
+        document.getElementById("finalScreen").style.display = "flex";
+    };
+}
 </script>
 
 </body>
