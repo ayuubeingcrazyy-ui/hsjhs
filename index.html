@@ -1,151 +1,244 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YOU ARE INVITED | HSJHS FAREWELL</title>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --blood-red: #8a0303;
+            --glow-red: #ff0000;
+        }
 
-<link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #0d0202;
+            font-family: 'Creepster', system-ui;
+            color: white;
+        }
 
-<title>Farewell Invite</title>
+        /* --- BACKGROUND & FOG --- */
+        .background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Using your uploaded background image */
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                        url('YOUR_BACKGROUND_IMAGE.jpg');
+            background-size: cover;
+            background-position: center;
+            z-index: -3;
+        }
 
-<style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Creepster', cursive;
-}
+        .fog {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 100%;
+            background: url('https://raw.githubusercontent.com/atlemo/Transparent-Textures/master/fog.png');
+            opacity: 0.3;
+            z-index: -1;
+            animation: fogMove 60s linear infinite;
+            pointer-events: none;
+        }
 
-body{
-background:url('YOUR_BACKGROUND_IMAGE.jpg') center/cover no-repeat;
-height:100vh;
-overflow:hidden;
-color:white;
-}
+        @keyframes fogMove {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
 
-/* Pages */
-.page{
-position:absolute;
-width:100%;
-height:100%;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-text-align:center;
-transition:opacity 1s;
-}
+        /* --- DRIPPING BLOOD (Thin Liquid Style) --- */
+        .blood-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
 
-.hidden{opacity:0;pointer-events:none;}
+        .drip {
+            position: absolute;
+            top: -150px;
+            width: 2px;
+            background: linear-gradient(to bottom, transparent, var(--blood-red), var(--glow-red));
+            height: 200px;
+            filter: blur(1px);
+            box-shadow: 0 0 10px var(--glow-red);
+            opacity: 0.8;
+            animation: dripFall linear infinite;
+        }
 
-button{
-margin-top:20px;
-padding:12px 40px;
-border:none;
-background:red;
-color:white;
-font-size:20px;
-border-radius:8px;
-cursor:pointer;
-}
+        @keyframes dripFall {
+            0% { transform: translateY(0); opacity: 0; }
+            10% { opacity: 1; }
+            100% { transform: translateY(110vh); opacity: 0.3; }
+        }
 
-/* Blood */
-.blood-container{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-pointer-events:none;
-z-index:5;
-overflow:hidden;
-}
+        /* --- SECTIONS --- */
+        section {
+            display: none;
+            height: 100vh;
+            width: 100%;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: absolute;
+        }
 
-.blood{
-position:absolute;
-top:-120px;
-width:35px;
-height:140px;
-background:linear-gradient(darkred,red);
-border-radius:50%;
-animation:drop 6s linear infinite;
-opacity:.8;
-}
+        #screen1 { display: flex; z-index: 5; }
+        #screen2 { z-index: 20; background: black; }
+        #screen3 { z-index: 5; }
 
-@keyframes drop{
-0%{transform:translateY(-150px);}
-100%{transform:translateY(120vh);}
-}
+        .fade-text {
+            animation: fadeInOut 4s ease-in-out infinite;
+            text-shadow: 0 0 20px #000;
+        }
 
-/* Fog */
-.fog{
-position:absolute;
-width:200%;
-height:100%;
-background:radial-gradient(circle at 50% 50%,rgba(255,255,255,.05),transparent);
-animation:fogMove 40s linear infinite;
-}
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.3; transform: scale(0.95); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
 
-@keyframes fogMove{
-from{transform:translateX(0);}
-to{transform:translateX(-50%);}
-}
+        /* --- ENTER BUTTON --- */
+        .btn-enter {
+            margin-top: 30px;
+            padding: 15px 45px;
+            font-family: 'Creepster', cursive;
+            font-size: 2.2rem;
+            background: transparent;
+            color: var(--blood-red);
+            border: 2px solid var(--blood-red);
+            cursor: pointer;
+            transition: 0.4s;
+            z-index: 100;
+        }
 
-/* Bat */
-.bat{
-position:absolute;
-top:15%;
-width:80px;
-animation:fly 12s linear infinite;
-}
+        .btn-enter:hover {
+            color: white;
+            background: var(--blood-red);
+            box-shadow: 0 0 30px var(--glow-red);
+        }
 
-@keyframes fly{
-from{left:-100px;}
-to{left:110%;}
-}
-</style>
+        /* --- JUMPSCARE --- */
+        #jumpscare-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .shake { animation: shake 0.1s infinite; }
+        @keyframes shake {
+            0% { transform: translate(2px, 2px); }
+            50% { transform: translate(-2px, -2px); }
+            100% { transform: translate(2px, -2px); }
+        }
+
+        /* --- THE BAT --- */
+        .bat {
+            position: absolute;
+            width: 100px;
+            z-index: 2;
+            pointer-events: none;
+            animation: flyRight 10s linear infinite;
+        }
+
+        @keyframes flyRight {
+            0% { left: -150px; top: 10%; transform: rotate(10deg); }
+            50% { top: 40%; transform: rotate(-10deg) scale(1.2); }
+            100% { left: 110%; top: 15%; transform: rotate(10deg); }
+        }
+
+        /* --- FINAL CONTENT --- */
+        .final-text h1 { font-size: 4.5rem; color: var(--blood-red); margin-bottom: 0; }
+        .final-text p { font-size: 2rem; margin: 10px 0; }
+
+        .float { animation: floatAnim 4s ease-in-out infinite; }
+        @keyframes floatAnim {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+    </style>
 </head>
-
 <body>
 
-<div class="fog"></div>
+    <div class="background-container"></div>
+    <div class="fog"></div>
+    <div class="blood-container" id="blood"></div>
+    
+    <img src="YOUR_BAT_PNG.png" class="bat" alt="bat">
 
-<div class="blood-container">
-<span class="blood" style="left:10%;animation-delay:0s"></span>
-<span class="blood" style="left:30%;animation-delay:2s"></span>
-<span class="blood" style="left:50%;animation-delay:4s"></span>
-<span class="blood" style="left:70%;animation-delay:1s"></span>
-<span class="blood" style="left:90%;animation-delay:3s"></span>
-</div>
+    <section id="screen1">
+        <h2 class="fade-text">INITIALIZING...</h2>
+        <h1 class="fade-text" style="font-size: 5rem;">DON'T BLINK.</h1>
+        <button class="btn-enter" onclick="startJumpscare()">ENTER</button>
+    </section>
 
-<img class="bat" src="YOUR_BAT_PNG.png">
+    <section id="screen2">
+        <video id="jumpscare-video" preload="auto">
+            <source src="jumpscare.mp4" type="video/mp4">
+        </video>
+    </section>
 
-<div class="page" id="p1">
-<h1>INITIALIZING...</h1>
-<p>DON'T BLINK.</p>
-<button onclick="next(1)">ENTER</button>
-</div>
+    <section id="screen3">
+        <div class="final-text float">
+            <h1>YOU HAVE BEEN CHOSEN.</h1>
+            <p>WE’LL MEET AT FAREWELL 👁️</p>
+            <br>
+            <p style="color: var(--blood-red); font-size: 2.5rem;">Howrah St. John’s High School</p>
+            <p>Venue: School Auditorium</p>
+            <p style="font-size: 1.5rem; opacity: 0.7;">Time: To Be Announced</p>
+        </div>
+    </section>
 
-<div class="page hidden" id="p2">
-<h1>👁️</h1>
-<p>Loading Memories...</p>
-<button onclick="next(2)">NEXT</button>
-</div>
+    <script>
+        // Generate Deep Blood Drips
+        const bloodContainer = document.getElementById('blood');
+        for (let i = 0; i < 30; i++) {
+            let drip = document.createElement('div');
+            drip.className = 'drip';
+            drip.style.left = Math.random() * 100 + 'vw';
+            drip.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            drip.style.animationDelay = (Math.random() * 8) + 's';
+            // Randomly vary the width for depth
+            drip.style.width = (Math.random() * 3 + 1) + 'px';
+            bloodContainer.appendChild(drip);
+        }
 
-<div class="page hidden" id="p3">
-<h1>YOU HAVE BEEN CHOSEN.</h1>
-<p>WE'LL MEET AT FAREWELL 👁️</p>
-<p>Howrah St John's High School</p>
-<p>Venue: School Auditorium</p>
-<p>Time: To Be Announced</p>
-</div>
+        function startJumpscare() {
+            const s1 = document.getElementById('screen1');
+            const s2 = document.getElementById('screen2');
+            const video = document.getElementById('jumpscare-video');
 
-<script>
-function next(n){
-document.getElementById('p'+n).classList.add('hidden');
-document.getElementById('p'+(n+1)).classList.remove('hidden');
-}
-</script>
+            s1.style.display = 'none';
+            s2.style.display = 'flex';
+            document.body.classList.add('shake');
 
+            video.play().catch(error => {
+                console.log("Video Playback failed:", error);
+                showFinalScreen();
+            });
+
+            video.onended = () => {
+                showFinalScreen();
+            };
+        }
+
+        function showFinalScreen() {
+            document.body.classList.remove('shake');
+            document.getElementById('screen2').style.display = 'none';
+            document.getElementById('screen3').style.display = 'flex';
+        }
+    </script>
 </body>
 </html>
