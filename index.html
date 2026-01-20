@@ -3,102 +3,88 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Farewell Horror</title>
+<title>Farewell Horror Invite</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
 
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Creepster', cursive;
-}
-
+*{margin:0;padding:0;box-sizing:border-box;}
 body{
+font-family:'Creepster',cursive;
 background:black;
 color:white;
 overflow:hidden;
-text-align:center;
-animation:flicker 4s infinite;
 }
 
 .page{
-width:100vw;
+position:absolute;
+width:100%;
 height:100vh;
-display:none;
+display:flex;
+flex-direction:column;
 justify-content:center;
 align-items:center;
-flex-direction:column;
-position:absolute;
-top:0;
-left:0;
+text-align:center;
+background:url("bg.jpg") center/cover no-repeat;
 }
 
-.show{display:flex;}
+.hidden{display:none;}
 
-h1{font-size:2.5rem;margin-bottom:20px;}
-p{font-size:1.4rem;}
+h1{font-size:2.2rem;margin-bottom:10px;}
+p{font-size:1.3rem;margin-bottom:15px;}
 
 button{
-margin-top:25px;
-padding:12px 30px;
-background:red;
+padding:10px 25px;
 border:none;
+background:red;
 color:white;
-font-size:1.3rem;
-border-radius:6px;
+font-family:'Creepster';
+font-size:1.1rem;
 cursor:pointer;
-}
-
-.blood{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:120px;
-background:linear-gradient(to bottom,#8b0000,transparent);
-animation:drip 6s linear infinite;
-pointer-events:none;
-}
-
-@keyframes drip{
-0%{transform:translateY(-40px);}
-100%{transform:translateY(40px);}
-}
-
-.bat{
-position:fixed;
-top:25%;
-right:-150px;
-width:120px;
-animation:fly 8s linear infinite;
-}
-
-@keyframes fly{
-from{right:-150px;}
-to{right:110%;}
-}
-
-@keyframes flicker{
-0%,100%{opacity:1;}
-50%{opacity:.9;}
-55%{opacity:.8;}
+border-radius:4px;
 }
 
 video{
+width:90%;
+max-width:350px;
+border-radius:10px;
+}
+
+/* BLOOD */
+.blood{
+position:fixed;
+top:-150px;
+left:0;
 width:100%;
-height:100%;
-object-fit:cover;
+height:200px;
+background:url("blood.png") repeat-x;
+background-size:140px;
+pointer-events:none;
+animation:drip 10s linear infinite;
+z-index:999;
 }
 
-.fade{
-animation:fadein 2s;
+@keyframes drip{
+0%{transform:translateY(-120px);}
+100%{transform:translateY(110vh);}
 }
 
-@keyframes fadein{
-from{opacity:0;}
-to{opacity:1;}
+/* BAT */
+.bat{
+position:absolute;
+top:25%;
+left:-150px;
+width:130px;
+animation:fly 18s ease-in-out infinite;
+filter:drop-shadow(0 0 8px black);
+}
+
+@keyframes fly{
+0%{transform:translateX(-150px) scale(.6);opacity:0;}
+20%{opacity:1;}
+50%{transform:translateX(50vw) translateY(-40px) scale(.9);}
+80%{transform:translateX(110vw) translateY(30px) scale(.7);}
+100%{opacity:0;}
 }
 </style>
 </head>
@@ -106,44 +92,38 @@ to{opacity:1;}
 <body>
 
 <!-- PAGE 1 -->
-<div class="page show" id="p1">
+<div class="page" id="page1">
 <div class="blood"></div>
-<img src="bat.png" class="bat">
 <h1>INITIALIZING...</h1>
 <p>DON'T BLINK.</p>
-<button onclick="go2()">NEXT</button>
+<button onclick="nextPage(2)">NEXT</button>
 </div>
 
 <!-- PAGE 2 -->
-<div class="page" id="p2">
-<video id="jump" src="jumpscare.mp4"></video>
+<div class="page hidden" id="page2">
+<video id="scare" src="jumpscare.mp4"></video>
+<button onclick="nextPage(3)">CONTINUE</button>
 </div>
 
 <!-- PAGE 3 -->
-<div class="page" id="p3">
+<div class="page hidden" id="page3">
 <div class="blood"></div>
 <img src="bat.png" class="bat">
 <h1>YOU HAVE BEEN CHOSEN.</h1>
 <p>WE'LL MEET AT FAREWELL 👁️</p>
-<br>
-<p>Howrah St John's High School</p>
+<p>Howrah St. John’s High School</p>
 <p>Venue: School Auditorium</p>
-<p>Date: 31 January 2026</p>
 </div>
 
 <script>
-function go2(){
-document.getElementById('p1').classList.remove('show');
-document.getElementById('p2').classList.add('show');
+function nextPage(n){
+document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));
+document.getElementById('page'+n).classList.remove('hidden');
 
-let v=document.getElementById('jump');
-v.muted=false;
+if(n==2){
+let v=document.getElementById("scare");
 v.play();
-
-setTimeout(()=>{
-document.getElementById('p2').classList.remove('show');
-document.getElementById('p3').classList.add('show');
-},3000);
+}
 }
 </script>
 
