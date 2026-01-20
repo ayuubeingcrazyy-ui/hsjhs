@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>YOU ARE INVITED | HSJHS FAREWELL</title>
+    <title>FAREWELL | HSJHS</title>
     <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -33,7 +33,7 @@
             background-image: url('YOUR_BACKGROUND_IMAGE.jpg');
             background-size: cover;
             background-position: center;
-            z-index: -3;
+            z-index: -5; /* Back of everything */
         }
 
         .background-overlay {
@@ -42,8 +42,38 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle, transparent 20%, rgba(0,0,0,0.9) 100%);
-            z-index: -2;
+            background: radial-gradient(circle, transparent 20%, rgba(0,0,0,0.8) 100%);
+            z-index: -4;
+        }
+
+        /* --- REDUCED BLOOD BEHIND TEXT --- */
+        .blood-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1; /* Higher than BG, but lower than Text (which is 5+) */
+        }
+
+        .drip {
+            position: absolute;
+            top: -400px; 
+            width: 1.2px;
+            background: linear-gradient(to bottom, transparent, var(--blood-red), var(--glow-red));
+            height: 300px;
+            filter: blur(0.5px);
+            box-shadow: 0 0 5px var(--glow-red);
+            opacity: 0.6;
+            animation: dripFall linear infinite;
+        }
+
+        @keyframes dripFall {
+            0% { transform: translate3d(0, 0, 0); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translate3d(0, calc(100vh + 800px), 0); opacity: 0; }
         }
 
         .fog {
@@ -53,44 +83,14 @@
             width: 200%;
             height: 100%;
             background: url('https://raw.githubusercontent.com/atlemo/Transparent-Textures/master/fog.png');
-            opacity: 0.3;
-            z-index: -1;
+            opacity: 0.2;
+            z-index: -2;
             animation: fogMove 60s linear infinite;
         }
 
         @keyframes fogMove {
             from { transform: translateX(0); }
             to { transform: translateX(-50%); }
-        }
-
-        /* --- MOBILE-FIXED BLOOD DRIPS --- */
-        .blood-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 10;
-        }
-
-        .drip {
-            position: absolute;
-            top: -350px; 
-            width: 1.5px;
-            background: linear-gradient(to bottom, transparent, var(--blood-red), var(--glow-red));
-            height: 250px;
-            filter: blur(0.5px);
-            box-shadow: 0 0 5px var(--glow-red);
-            opacity: 0.8;
-            animation: dripFall linear infinite;
-        }
-
-        @keyframes dripFall {
-            0% { transform: translate3d(0, 0, 0); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translate3d(0, calc(100vh + 700px), 0); opacity: 0; }
         }
 
         /* --- SECTIONS --- */
@@ -105,35 +105,37 @@
             position: absolute;
             padding: 20px;
             box-sizing: border-box;
+            z-index: 10; /* Ensures text is always ABOVE the blood */
         }
 
-        #screen1 { display: flex; z-index: 5; }
-        #screen2 { z-index: 20; background: black; }
-        #screen3 { z-index: 5; }
+        #screen1 { display: flex; }
+        #screen2 { z-index: 100; background: black; }
+        #screen3 { }
 
         .fade-text {
             animation: fadeInOut 4s ease-in-out infinite;
-            text-shadow: 2px 2px 15px #000;
+            text-shadow: 0 0 20px #000, 0 0 10px #000;
         }
 
         @keyframes fadeInOut {
-            0%, 100% { opacity: 0.3; transform: scale(0.97); }
-            50% { opacity: 1; transform: scale(1.03); }
+            0%, 100% { opacity: 0.4; transform: scale(0.98); }
+            50% { opacity: 1; transform: scale(1.02); }
         }
 
-        /* --- ENTER BUTTON --- */
+        /* --- BUTTON --- */
         .btn-enter {
             margin-top: 40px;
             padding: 20px 60px;
             font-family: 'Creepster', cursive;
-            font-size: 2.5rem;
-            background: rgba(0,0,0,0.6);
+            font-size: 2.2rem;
+            background: rgba(0,0,0,0.7);
             color: var(--blood-red);
-            border: 3px solid var(--blood-red);
+            border: 2px solid var(--blood-red);
             cursor: pointer;
             transition: 0.3s;
             text-transform: uppercase;
-            -webkit-tap-highlight-color: transparent;
+            z-index: 20;
+            position: relative;
         }
 
         .btn-enter:active, .btn-enter:hover {
@@ -151,34 +153,27 @@
             100% { transform: translate(3px, -3px); }
         }
 
-        /* --- THE BAT --- */
+        /* --- BAT --- */
         .bat {
             position: absolute;
-            width: 80px;
-            z-index: 2;
+            width: 70px;
+            z-index: 2; /* Bat flies behind text, above blood */
             pointer-events: none;
-            animation: flyRight 10s linear infinite;
+            animation: flyRight 12s linear infinite;
         }
 
         @keyframes flyRight {
-            0% { left: -150px; top: 20%; }
-            100% { left: 110%; top: 25%; }
+            0% { left: -150px; top: 15%; }
+            100% { left: 110%; top: 20%; }
         }
 
-        /* --- FINAL CONTENT --- */
-        .final-text h1 { font-size: 3.5rem; color: var(--blood-red); line-height: 1; }
-        .final-text p { font-size: 1.6rem; margin: 10px 0; }
+        .final-text h1 { font-size: 3.2rem; color: var(--blood-red); margin-bottom: 0; }
+        .final-text p { font-size: 1.5rem; margin: 10px 0; }
         .float { animation: floatAnim 4s ease-in-out infinite; }
         
         @keyframes floatAnim {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-15px); }
-        }
-
-        @media (max-width: 600px) {
-            .final-text h1 { font-size: 2.5rem; }
-            .final-text p { font-size: 1.2rem; }
-            .btn-enter { font-size: 1.8rem; padding: 15px 40px; }
         }
     </style>
 </head>
@@ -186,7 +181,7 @@
 
     <audio id="ambient-sound" loop>
         <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3" type="audio/mpeg">
-        </audio>
+    </audio>
 
     <div class="background-container"></div>
     <div class="background-overlay"></div>
@@ -197,7 +192,7 @@
 
     <section id="screen1">
         <h2 class="fade-text">INITIALIZING...</h2>
-        <h1 class="fade-text">DON'T BLINK.</h1>
+        <h1 class="fade-text" style="font-size: 4rem;">DON'T BLINK.</h1>
         <button class="btn-enter" onclick="startJumpscare()">ENTER</button>
     </section>
 
@@ -219,14 +214,15 @@
     </section>
 
     <script>
+        // Reduced to 12 drips for a cleaner look
         const bloodContainer = document.getElementById('blood');
-        for (let i = 0; i < 25; i++) {
+        for (let i = 0; i < 12; i++) {
             let drip = document.createElement('div');
             drip.className = 'drip';
             drip.style.left = Math.random() * 100 + 'vw';
-            drip.style.animationDuration = (Math.random() * 3 + 2.5) + 's';
-            drip.style.animationDelay = (Math.random() * 5) + 's';
-            drip.style.width = (Math.random() * 2 + 0.5) + 'px';
+            drip.style.animationDuration = (Math.random() * 4 + 3) + 's';
+            drip.style.animationDelay = (Math.random() * 8) + 's';
+            drip.style.width = '1px';
             bloodContainer.appendChild(drip);
         }
 
@@ -234,8 +230,7 @@
             const video = document.getElementById('jumpscare-video');
             const audio = document.getElementById('ambient-sound');
             
-            // Start the creepy ambient music
-            audio.volume = 0.4;
+            audio.volume = 0.3;
             audio.play().catch(e => console.log("Audio play blocked"));
 
             document.getElementById('screen1').style.display = 'none';
